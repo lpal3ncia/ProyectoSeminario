@@ -1,0 +1,8 @@
+main {
+  /*display: flex;            /* Utiliza flexbox para el contenedor */
+  justify-content: center;  /* Centra el contenido horizontalmente */
+  /*align-items: center;      /* Centra el contenido verticalmente */
+  height: 100vh;            /* Hace que el main ocupe el 100% de la altura de la ventana */
+  margin: 0;                /* Elimina márgenes por defecto */
+  margin-top: 50px; /* Ajusta este valor según el espacio que necesites */
+}

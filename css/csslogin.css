@@ -1,0 +1,89 @@
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('IMG/Fondo.jpeg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.5; /* Aplica la opacidad a la imagen de fondo */
+    z-index: -1;
+}
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 500px; /* Ajusta el tamaño de la tarjeta */
+    height: 600px; /* Ajusta la altura de la tarjeta */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Asegura que el contenido se distribuya correctamente */
+}
+.card-header {
+    background-color: #D9D9D9; /* Color de la cabecera */
+    border-radius: 15px; /* Bordes redondeados */
+    text-align: center;
+    padding: 0.5rem; /* Reducir el padding */
+    margin-top: -2rem; /* Margen negativo para mover hacia arriba */
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+    width: 90%; /* Ajusta el ancho de la cabecera */
+}
+.card-body {
+    padding-top: 2rem; /* Aumentar padding para alinear con la cabecera */
+    flex-grow: 1; /* Permite que el cuerpo de la tarjeta crezca para llenar el espacio */
+    padding:80px 0;
+    margin:32px;
+}
+.btn-primary {
+    background-color: #00AEEF; /* Color del botón de inicio de sesión */
+    border-color: #00AEEF;
+}
+.btn-primary:hover {
+    background-color: #FFFFFF; /* Color del botón en hover */
+    border-color: #323E47;
+    color: black;
+}
+.form-control:focus {
+    border-color: #00AEEF; /* Color del borde del input en foco */
+    box-shadow: none;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    background-color: #00AEEF; /* Color del checkbox seleccionado */
+}
+
+/*Mensajes */
+.mensaje {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.mensaje.success {
+    background-color: #4CAF50;
+}
+
+.mensaje.error {
+    background-color: #F44336;
+}
+
+.mensaje .icon {
+    font-size: 20px;
+}
+
+.mensaje .cerrar {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}

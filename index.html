@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Megaprocesos</title>
+    <link rel="icon" href="IMG/favicon.ico">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/csslogin.css" rel="stylesheet">
+</head>
+<body>
+    <img src="IMG/Fondo.jpeg" class="background">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card">
+            <div class="card-header">
+                <img src="IMG/logo.webp" width="100%" height="100%">
+            </div>
+
+        <form id="loginForm">
+            <div class="card-body">
+                <div class="form-group">
+                    <input type="email" class="form-control" id="Correo" placeholder="Correo" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="Password" placeholder="Password" required>
+                </div>
+                <div class="custom-control custom-switch mb-3">
+                    <input type="checkbox" class="custom-control-input" id="rememberMe">
+                    <label class="custom-control-label" for="rememberMe">Recuérdame</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mt-4">Iniciar Sesión</button>
+                <div id="mensaje"></div>
+            </div>
+        </form>
+            <div class="card-footer text-center">
+                <small>¿Se te olvidó la contraseña?<a href="RecuperarContra.html"> Click aquí</a></small>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
