@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/IMG/favicon.ico">
+    <title>Reporte General De Empleados</title>
+    <link rel="stylesheet" href="../css/reportes.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+</head>
+
+<body>
+    <div class="report-container">
+        <div class="header">
+            <img src="../IMG/logo.webp" alt="Logo" class="logo">
+            <h1 class="report-title">Reporte General De Tickets</h1>
+        </div>
+        <br>
+
+        <div class="buttons">
+            <input type="text" id="searchInput" class="form-control bg-white text-black" placeholder="Buscar">
+            <button id="printButton">Imprimir</button>
+        </div>
+
+        <div class="content">
+            <table id="tablaPDF">
+                <thead>
+                    <tr>
+                        <th onclick="ordenarTabla(0)">No.</th>
+                        <th onclick="ordenarTabla(1)">Foto</th>
+                        <th onclick="ordenarTabla(2)">Nombre</th>
+                        <th onclick="ordenarTabla(3)">Apellido</th>
+                        <th onclick="ordenarTabla(4)">Area</th>
+                        <th onclick="ordenarTabla(5)">Puesto</th>
+                        <th onclick="ordenarTabla(6)">Contrato</th>
+                        <th onclick="ordenarTabla(7)">Fecha Contratación</th>
+                        <th onclick="ordenarTabla(8)">Fecha Retiro</th>
+                        <th onclick="ordenarTabla(9)">Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aquí se llenarán los datos dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script>
+        function ordenarTabla(columna) {
+            // Código de ordenación de tabla
+        }
+
+        // Imprimir
+        document.getElementById('printButton').addEventListener('click', () => {
+            window.print();
+        });
+
+        // Descargar PDF en formato horizontal
+        document.getElementById('downloadPdf').addEventListener('click', () => {
+            // Ocultar el div de botones
+            document.querySelector('.buttons').style.display = 'none';
+
+            html2canvas(document.querySelector('.report-container'), { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('l', 'mm', 'a4'); // 'l' para formato horizontal (landscape)
+
+                const imgWidth = 297; // Ancho en mm para A4 horizontal
+                const pageHeight = 210; // Alto en mm para A4 horizontal
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                const heightLeft = imgHeight;
+
+                // Ajuste del tamaño para que quepa en una sola página horizontal
+                const heightScale = pageHeight / imgHeight;
+                const widthScale = imgWidth / imgWidth;
+                const scale = Math.min(heightScale, widthScale);
+                const finalWidth = imgWidth * scale;
+                const finalHeight = imgHeight * scale;
+
+                pdf.addImage(imgData, 'PNG', 0, 0, finalWidth, finalHeight);
+
+                pdf.save('reporte_tickets.pdf');
+
+                // Mostrar el div de botones nuevamente
+                document.querySelector('.buttons').style.display = 'flex';
+            });
+        });
+
+        // Imprimir con ocultamiento de botones
+        document.getElementById('printButton').addEventListener('click', () => {
+            // Ocultar el div de botones
+            document.querySelector('.buttons').style.display = 'none';
+
+            window.print();
+
+            // Mostrar el div de botones nuevamente después de la impresión
+            setTimeout(() => {
+                document.querySelector('.buttons').style.display = 'flex';
+            }, 1000); // Tiempo suficiente para que el diálogo de impresión se cierre
+        });
+
+
+
+
+
+        // Filtrar empleados
+        document.getElementById('searchInput').addEventListener('input', (event) => {
+            const searchText = event.target.value.toLowerCase();
+            fetch(`http://localhost:3000/empleados/PDF?search=${searchText}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('tablaPDF').getElementsByTagName('tbody')[0];
+                    tbody.innerHTML = ''; // Limpiar tabla existente
+                    data.forEach(empleado => {
+                        const fila = tbody.insertRow();
+                        fila.insertCell(0).innerText = empleado.IDEmpleado;
+                        fila.insertCell(1).innerText = empleado.Foto_Perfil;
+                        fila.insertCell(2).innerText = empleado.Nombre;
+                        fila.insertCell(3).innerText = empleado.Apellido;
+                        fila.insertCell(4).innerText = empleado.Descripcion_Area;
+                        fila.insertCell(5).innerText = empleado.Puesto;
+                        fila.insertCell(6).innerText = empleado.Contrato;
+                        fila.insertCell(7).innerText = empleado.Fecha_Inicio;
+                        fila.insertCell(8).innerText = empleado.Fecha_Retiro;
+                        fila.insertCell(9).innerText = empleado.Estado;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        function ordenarTabla(columna) {
+      const tabla = document.getElementById("tablaPDF"); 
+      let filas, intercambiar, i, x, y, debeIntercambiar;
+      let orden = "asc"; // Ascendente por defecto
+      let contadorIntercambios = 0;
+      let cambiando = true;
+
+      while (cambiando) {
+        cambiando = false;
+        filas = tabla.rows;
+
+        for (i = 1; i < (filas.length - 1); i++) {
+          intercambiar = false;
+          x = filas[i].getElementsByTagName("TD")[columna];
+          y = filas[i + 1].getElementsByTagName("TD")[columna];
+
+          // Comparar basado en si es numérico o alfabético
+          if (orden === "asc") {
+            if (!isNaN(x.innerHTML) && !isNaN(y.innerHTML)) {
+              if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+                intercambiar = true;
+                break;
+              }
+            } else if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              intercambiar = true;
+              break;
+            }
+          } else if (orden === "desc") {
+            if (!isNaN(x.innerHTML) && !isNaN(y.innerHTML)) {
+              if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+                intercambiar = true;
+                break;
+              }
+            } else if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+              intercambiar = true;
+              break;
+            }
+          }
+        }
+
+        if (intercambiar) {
+          filas[i].parentNode.insertBefore(filas[i + 1], filas[i]);
+          cambiando = true;
+          contadorIntercambios++;
+        } else {
+          if (contadorIntercambios === 0 && orden === "asc") {
+            orden = "desc";
+            cambiando = true;
+          }
+        }
+      }
+    }
+    </script>
+</body>
+
+</html>
