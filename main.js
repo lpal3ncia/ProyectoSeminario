@@ -274,10 +274,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    //---------------CONSULTA DE EMPLEADO-------------------
-    const tablaTickets = document.getElementById('tableTickets');
-    if (tablaTickets) {
-        const tbody = tablaTickets.getElementsByTagName('tbody')[0];
+    //---------------CONSULTA DE TICKETS-------------------
+    const tableTickets = document.getElementById('tableTickets');
+    if (tableTickets) {
+        const tbody = tableTickets.getElementsByTagName('tbody')[0];
 
         fetch('http://localhost:3000/tickets')
             .then(response => {
@@ -298,6 +298,188 @@ document.addEventListener('DOMContentLoaded', function () {
                     fila.insertCell(4).innerText = ticket.IDEstado;
                 });
 
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    ////////////////////////AREA////////////////////////
+    //---------------AGREGAR NUEVA AREA-------------------
+    const addAreaForm = document.getElementById('addArea');
+    if (addAreaForm) {
+        addAreaForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nuevaArea = {
+                Descripcion_Area: document.getElementById('Descripcion_Area').value,
+            };
+
+            fetch('http://localhost:3000/area/nuevo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevaArea),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarMensaje("Area creada exitosamente", "success");
+                        addAreaForm.reset();
+                    } else {
+                        mostrarMensaje("Error al crear el area", "error");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+                location.reload(true);
+
+        });
+    }
+
+    //---------------CONSULTA DE AREAS-------------------
+    const tableArea = document.getElementById('tableAreas');
+    if (tableArea) {
+        const tbody = tableArea.getElementsByTagName('tbody')[0];
+
+        fetch('http://localhost:3000/api/areas')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la red');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data); // Verifica qué datos se están recibiendo
+                data.forEach(ticket => {
+                    const fila = tbody.insertRow();
+
+                    fila.insertCell(0).innerText = ticket.IDArea;
+                    fila.insertCell(1).innerText = ticket.Descripcion_Area;
+
+                    // Celda para botones de editar y eliminar
+                    const accionesCelda = fila.insertCell(2);
+                    const btnEliminar = document.createElement('button');
+                    btnEliminar.innerText = 'Eliminar';
+                    btnEliminar.className = 'btn-eliminar';
+
+                    accionesCelda.appendChild(btnEliminar);
+
+                    // Evento click para eliminar
+                    btnEliminar.addEventListener('click', function () {
+                        if (confirm(`¿Estás seguro de que deseas eliminar el área: ${ticket.Descripcion_Area}?`)) {
+                            eliminarArea(ticket.IDArea);
+                        }
+                    });
+                });
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    //---------------ELIMINAR AREA-------------------
+    function eliminarArea(id) {
+        fetch(`http://localhost:3000/area/eliminar/${id}`, {
+            method: 'DELETE',
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarMensaje("Empleado eliminado exitosamente", "success");
+                    // Recargar la tabla o eliminar la fila correspondiente
+                    location.reload(); // Esta línea recarga la página para refrescar la tabla
+                } else {
+                    mostrarMensaje("Error al eliminar empleado", "error");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    ////////////////////////CONTRATO////////////////////////
+    //---------------AGREGAR NUEVO CONTRATO-------------------
+    const addContratoForm = document.getElementById('addContrato');
+    if (addContratoForm) {
+        addContratoForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nuevoContrato = {
+                Descripcion_Area: document.getElementById('Descripcion_Contrato').value,
+            };
+
+            fetch('http://localhost:3000/contrato/nuevo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoContrato),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarMensaje("Contrato creado exitosamente", "success");
+                        addContratoForm.reset();
+                    } else {
+                        mostrarMensaje("Error al crear el contrato", "error");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+                location.reload(true);
+
+        });
+    }
+
+    //---------------CONSULTA DE CONTRATOS-------------------
+    const tableContrato = document.getElementById('tableContratos');
+    if (tableContrato) {
+        const tbody = tableContrato.getElementsByTagName('tbody')[0];
+
+        fetch('http://localhost:3000/api/contrato')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de la red');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data); // Verifica qué datos se están recibiendo
+                data.forEach(ticket => {
+                    const fila = tbody.insertRow();
+
+                    fila.insertCell(0).innerText = ticket.IDContrato;
+                    fila.insertCell(1).innerText = ticket.Descripcion_Contrato;
+
+                    // Celda para botones de editar y eliminar
+                    const accionesCelda = fila.insertCell(2);
+                    const btnEliminar = document.createElement('button');
+                    btnEliminar.innerText = 'Eliminar';
+                    btnEliminar.className = 'btn-eliminar';
+
+                    accionesCelda.appendChild(btnEliminar);
+
+                    // Evento click para eliminar
+                    btnEliminar.addEventListener('click', function () {
+                        if (confirm(`¿Estás seguro de que deseas eliminar el contrato: ${ticket.Descripcion_Contrato}?`)) {
+                            eliminarArea(ticket.IDContrato);
+                        }
+                    });
+                });
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    //---------------ELIMINAR CONTRATO-------------------
+    function eliminarContrato(id) {
+        fetch(`http://localhost:3000/contrato/eliminar/${id}`, {
+            method: 'DELETE',
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarMensaje("Contrato eliminado exitosamente", "success");
+                    // Recargar la tabla o eliminar la fila correspondiente
+                    location.reload(); // Esta línea recarga la página para refrescar la tabla
+                } else {
+                    mostrarMensaje("Error al eliminar contrato", "error");
+                }
             })
             .catch(error => console.error('Error:', error));
     }
